@@ -1,4 +1,5 @@
 from dataclasses import fields
+from tempfile import template
 from django.shortcuts import redirect
 from django.views.generic.list import ListView
 from django.contrib.auth.views import LoginView
@@ -7,7 +8,10 @@ from django.contrib.auth.forms import UserCreationForm
 from django.urls import reverse_lazy
 from django.contrib.auth import login
 from django.contrib.auth.mixins import LoginRequiredMixin
+from bootstrap_modal_forms.generic import BSModalCreateView, BSModalUpdateView, BSModalDeleteView
 
+
+from .forms import TransactionForm
 from .models import Transactions, Profile
 # from .forms import *
 
@@ -47,8 +51,22 @@ class TransactionsView(LoginRequiredMixin, ListView):
         context['transactions'] = context['transactions'].filter(user=self.request.user.prof)
         return context
 
-class TransactionCreate(CreateView):
+
+class TransactionCreateView(BSModalCreateView):
+    template_name = 'budget_tracker/create.html'
+    form_class = TransactionForm
+    success_message = "Transaction was created"
+    success_url = reverse_lazy('transactions')
+
+class TransactionUpdateView(BSModalUpdateView):
     model = Transactions
-    fields = '__all__'
-    template_name = 'budget_tracker/transactions_form.html'
+    template_name = 'budget_tracker/update.html'
+    form_class = TransactionForm
+    success_message = 'Transaction was updated.'
+    success_url = reverse_lazy('transactions')
+
+class TransactionDeleteView(BSModalDeleteView):
+    model = Transactions
+    template_name = 'budget_tracker/delete.html'
+    success_message = 'Success: Book was deleted.'
     success_url = reverse_lazy('transactions')

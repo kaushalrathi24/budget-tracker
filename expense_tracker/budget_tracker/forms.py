@@ -1,3 +1,4 @@
+# from dataclasses import fields
 # from django import forms
 # from .models import *
 
@@ -18,3 +19,18 @@
 #             'category' : forms.CharField(attrs={'class': 'form-control'}),
 #             'type' : forms.ChoiceField(attrs={'class': 'form-control'}, choices=TYPE_CHOICES)
 #         }
+
+
+# # class TransactionForm(forms.ModelForm):
+# #     class Meta:
+# #         model = Transactions
+# #         fields = ('title', 'description', 'amount', 'to', 'date', 'category', 'type')
+    
+from dataclasses import fields
+from bootstrap_modal_forms.forms import BSModalModelForm
+from .models import Transactions
+
+class TransactionForm(BSModalModelForm):
+    class Meta:
+        model = Transactions
+        fields = '__all__'
